@@ -3,10 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kanban App</title>
-    <link rel="stylesheet" href="static\css\style.css">
+    <title>Productivity - Home</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='daily-planning.png') }}">
 </head>
 <body>
-    <p>Hello</p>
+    <nav class="nav-cont">
+        <h1>Productivity App</h1>
+        {% if current_user.is_authenticated %}
+        <div class="nav-user">
+            <span>Hello, {{ current_user.username }}</span>
+            <a href="{{ url_for('logout') }}">Logout</a>
+        </div>
+        {% endif %}
+    </nav>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
 </body>
 </html>
