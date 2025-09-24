@@ -1,20 +1,23 @@
-{% block content %}
+{% extends "index.html" %}
 
+{% block title %}Workspaces{% endblock %}
+
+<!-- Wee can see all our workspaces here -->
+{% block content %}
 <div class="home">
     <h2>My workspaces</h2>
-
-    <div class="worspaces-grid">
+    <div class="workspaces-grid">
         {% for workspace in workspaces %}
         <div class="workspace-card"> 
             <h3>{{ workspace.title }}</h3>
             <p>{{ workspace.description }}</p>
-            <a href="{{ url_for('workspace', workspace_id = workspace.id) }}" class="button">Acessar</a>
+            <a href="{{url_for('views.workspace', workspace_id = workspace.id)}}" class="button">Acessar</a>
         </div>
         {% endfor %}
 
         <div class="new-workspace-card">
             <h3>+ Create a workspace</h3>
-            <form method="POST" action="{{ url_for('/create_workspace')}}">
+            <form method="POST" action="{{ url_for('api.create_workspace')}}">
                 <input type="text" name="title" placeholder="Workspace's name" required>
                 <textarea name="description" placeholder="Workspace's description"></textarea>
                 <button type="submit" class="button">Create</button>
@@ -24,3 +27,4 @@
 </div>
 
 {% endblock %}
+

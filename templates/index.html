@@ -3,23 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Productivity - Home</title>
+    <title>Productivity - {% block title %}{% endblock %}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='daily-planning.png') }}">
 </head>
 <body>
     <nav class="nav-cont">
-        <h1>Productivity App</h1>
-        {% if current_user.is_authenticated %}
-        <div class="nav-user">
-            <span>Hello, {{ current_user.username }}</span>
-            <a href="{{ url_for('logout') }}">Logout</a>
+        <div id="user-options">
+            <h1>Productivity App</h1>
+            {% if current_user.is_authenticated %}
+            <div class="nav-user">
+                <span>Hello, {{ current_user.username }}</span>
+                <a href="{{url_for('auth.logout')}}">Logout</a>
+                <a href="{{url_for('auth.logout')}}">See my profile</a>
+            </div>
+            {% endif %}
         </div>
-        {% endif %}
+        <div id="navigation-hierarchy">
+            <a href="{{url_for('views.index')}}">Home</a>
+
+            {% if workspace %}
+            <span class="separator"> / </span>
+            <a href="{{url_for('views.workspace', workspace_id=workspace.id)}}">{{ workspace.title }}</a>
+            {% endif %}
+
+            {% if board %}
+            <span class="separator"> / </span>
+            <a href="{{url_for('views.board', board_id=board.id)}}">{{ board.title }}</a>
+            {% endif %}
+        </div>
     </nav>
 
     <main>
-        {% block content %}{% endblock %}
+        {% block content %}
+        
+        {% endblock %}
     </main>
+    <footer>Geosync © 2025</footer>
 </body>
 </html>
