@@ -1,0 +1,81 @@
+{% extends "index.html" %}
+
+{% block title %}Cards{% endblock %}
+
+<!-- Wee can see all our cards here -->
+{% block content %}
+<div class="board-container">
+    <h2>{{ board.title }}</h2>
+    
+    <div class="columns-container">
+        {% for column in columns %}
+        <div class="column">
+            <div class="column-header">
+                <h3>{{ column.title }}</h3>
+                <h4>{{ column.id }}</h4>
+                <button class="add-card-btn" onclick="showAddForm({{ column.id }})">
+                    ＋
+                </button>
+            </div>
+            
+            <div class="cards-list" id="cards-{{ column.id }}">
+                {% for card in column.cards|sort(attribute='position') %}
+                <div class="card">
+                    <h4>{{ card.title }}</h4>
+                    {% if card.description %}
+                    <p>{{ card.description }}</p>
+                    {% endif %}
+                    {% if card.responsible_id %}
+                    <span class="assignee">👤 Responsável: {{ card.responsible_user.username if card.responsible_id else 'Unknown' }}</span>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Modal Simples para Adicionar Card -->
+<div id="addModal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <h3>Adicionar Novo Card</h3>
+        <form onsubmit="addNewCard(event)">
+            <input type="hidden" id="modalColumnId">
+            
+            <div>
+                <label>Título:</label>
+                <input type="text" id="cardTitle" required>
+            </div>
+            
+            <div>
+                <label>Descrição (opcional):</label>
+                <textarea id="cardDescription"></textarea>
+            </div>
+
+            <div>
+                <label>Responsible ID:</label>
+                <input type="number" id="responsibleId" required>
+            </div>
+
+            <div>
+                <label>Deadline:</label>
+                <input type="datetime-local" id="date" step=1 required>
+            </div>
+            
+            <div class="modal-buttons">
+                <button type="button" onclick="closeModal()">Cancelar</button>
+                <button type="submit">Adicionar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/kanban.js') }}"></script>
+
+{% endblock %}
+
+
+
+
+

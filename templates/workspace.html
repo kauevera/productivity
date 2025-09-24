@@ -1,12 +1,29 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kanban App</title>
-    <link rel="stylesheet" href="static\css\style.css">
-</head>
-<body>
-    <p>Hello</p>
-</body>
-</html>
+{% extends "index.html" %}
+
+{% block title %}Boards{% endblock %}
+
+<!-- Wee can see all our boards here -->
+{% block content %}
+<div class="workspace">
+    <h2>My boards</h2>
+    <div class="boards-grid">
+        {% for board in boards %}
+        <div class="board-card">
+            <h3>{{ board.title }}</h3>
+            <p>{{ board.about }}</p>
+            <a href="{{url_for('views.board', board_id=board.id)}}" class="button">Acessar</a>
+        </div>
+        {% endfor %}
+    
+        <div class="new-board-card">
+            <h3>+ Create a board</h3>
+            <form method="POST" action="{{ url_for('api.create_board', workspace_id=workspace.id)}}">
+                <input type="text" name="title" placeholder="Board's name" required>
+                <textarea name="about" placeholder="Board's description"></textarea>
+                <button type="submit" class="button">Create</button>
+            </form>
+        </div>
+    </div>
+
+</div>
+{% endblock %} 
