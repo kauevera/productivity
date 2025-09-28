@@ -1,4 +1,4 @@
-// Showing the form
+// Showing the add form
 function showAddForm(columnId) {
     document.getElementById('modalColumnId').value = columnId;
     document.getElementById('cardTitle').value = '';
@@ -8,10 +8,37 @@ function showAddForm(columnId) {
     document.getElementById('addModal').style.display = 'block';
 }
 
-// Closing the modal
+// Closing the add form modal
 function closeModal() {
     document.getElementById('addModal').style.display = 'none';
 }
+
+// Closing the add form modal
+window.addEventListener('click', function(event) {
+    const modal = document.getElementById('addModal');
+    if (event.target === modal) {
+        closeModal();
+    }
+});
+
+//Showing the delete card modal
+function showDelCardModal(cardId) {
+    document.getElementById('modalCardnId').value = cardId;
+    document.getElementById('delModal').style.display = 'block';
+}
+
+// Closing the delete card modal
+function closeDelModal() {
+    document.getElementById('delModal').style.display = 'none';
+}
+
+// Closing the delete card modal
+window.addEventListener('click', function(event) {
+    const modal = document.getElementById('delModal');
+    if (event.target === modal) {
+        closeDelModal();
+    }
+});
 
 // Adding new cards
 async function addNewCard(event) {
@@ -49,10 +76,29 @@ async function addNewCard(event) {
     }
 }
 
-// Closing the modal
-window.addEventListener('click', function(event) {
-    const modal = document.getElementById('addModal');
-    if (event.target === modal) {
-        closeModal();
+// Removing cards
+async function delCard(event) {
+    event.preventDefault();
+    const card_id = document.getElementById('modalCardnId').value
+    const API_URL = "http://127.0.0.1:5000"; 
+    
+    try {
+        const response = await fetch(`${API_URL}/api/delete_card/${card_id}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            });
+        if (response.ok) {
+            alert('Card deletado com sucesso');
+            window.location.reload();
+        } else {
+            alert('Erro ao deletar o card');
+        }
+    } catch (error) {
+        console.error('Erro:', error);
+        alert('Erro de conexão');
     }
-});
+
+
+}

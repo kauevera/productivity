@@ -126,3 +126,32 @@ def create_card():
 
     # Returning to the endpoint that shows the cards
     return redirect(url_for('views.board', board_id=board.id)), 200
+
+# Card Deleting Route
+@api_bp.route('/delete_card/<int:card_id>', methods=['DELETE'])
+@login_required
+def delete_card(card_id):
+    # Checking the card existence
+    card = Card.query.filter_by(id=card_id).first()
+    if not card:
+        return jsonify({"message:": "O elemento informado não existe"}), 404
+
+    # Getting the board_id
+    board_id = card.board_id
+    # Getting the board
+    board = Board.query.filter_by(id=board_id).first()
+    # Getting the workspace_id
+    workspace_id = board.workspace_id
+    # Getting the workspace
+    workspace = Workspace.query.filter_by(id=workspace_id).first()
+
+    # Checking the users access
+    if not WorkspaceMember.query.filter_by(user_id=current_user.id, workspace_id=workspace.id).first():
+        return jsonify({"message:": "Acesso negado"}), 403
+
+    # Removing the card
+    db.session.delete(card)
+    db.session.commit()
+
+    # Returning to the endpoint that shows the cards
+    return redirect(url_for('views.board', board_id=board.id)), 200

@@ -28,6 +28,9 @@
                     {% if card.responsible_id %}
                     <span class="assignee">👤 Responsável: {{ card.responsible_user.username if card.responsible_id else 'Unknown' }}</span>
                     {% endif %}
+                    <button class="del-card-btn" onclick="showDelCardModal({{ card.id }})">
+                    Delete card
+                    </button>
                 </div>
                 {% endfor %}
             </div>
@@ -36,7 +39,7 @@
     </div>
 </div>
 
-<!-- Modal Simples para Adicionar Card -->
+<!-- Modal to add new cards -->
 <div id="addModal" class="modal" style="display: none;">
     <div class="modal-content">
         <h3>Adicionar Novo Card</h3>
@@ -57,7 +60,6 @@
                 <label>Responsible ID:</label>
                 <input type="number" id="responsibleId" required>
             </div>
-
             <div>
                 <label>Deadline:</label>
                 <input type="datetime-local" id="date" step=1 required>
@@ -70,6 +72,18 @@
         </form>
     </div>
 </div>
+
+<!-- Modal to delete cards -->
+ <div id="delModal" class="modal" style="display: none;"> 
+    <div class="modal-content">
+        <h3>Você tem certeza que deseja remover esse card?</h3>
+            <form onsubmit="delCard(event)">
+                <input type="hidden" id="modalCardnId">
+                <button type="submit">Sim</button>
+                <button type="button" onclick="closeDelModal()">Não</button>
+            </form>            
+    </div>
+ </div>
 
 <script src="{{ url_for('static', filename='js/kanban.js') }}"></script>
 
