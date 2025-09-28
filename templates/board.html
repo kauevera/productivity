@@ -28,7 +28,7 @@
                     {% if card.responsible_id %}
                     <span class="assignee">👤 Responsável: {{ card.responsible_user.username if card.responsible_id else 'Unknown' }}</span>
                     {% endif %}
-                    <button class="del-card-btn" onclick="showDelCardModal({{ card.id }})">
+                    <button class="add-card-btn" onclick="showDelCardModal({{ card.id }})">
                     Delete card
                     </button>
                 </div>
@@ -55,10 +55,11 @@
                 <label>Descrição (opcional):</label>
                 <textarea id="cardDescription"></textarea>
             </div>
-
             <div>
-                <label>Responsible ID:</label>
-                <input type="number" id="responsibleId" required>
+                <label>Selecione um responsável:</label>
+                <select id="workspace_members_list" onclick="loadWorkspaceMembers({{ board.id }})">
+                    <option>Carregando opções...</option>
+                </select>
             </div>
             <div>
                 <label>Deadline:</label>
@@ -78,7 +79,7 @@
     <div class="modal-content">
         <h3>Você tem certeza que deseja remover esse card?</h3>
             <form onsubmit="delCard(event)">
-                <input type="hidden" id="modalCardnId">
+                <input type="hidden" id="modalCardId">
                 <button type="submit">Sim</button>
                 <button type="button" onclick="closeDelModal()">Não</button>
             </form>            

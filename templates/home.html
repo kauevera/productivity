@@ -12,6 +12,9 @@
             <h3>{{ workspace.title }}</h3>
             <p>{{ workspace.description }}</p>
             <a href="{{url_for('views.workspace', workspace_id = workspace.id)}}" class="button">Acessar</a>
+            <div>
+                <button class="add-card-btn" onclick="showAddMembersModal({{ workspace.id }})">Adicionar um membro</button>
+            </div>
         </div>
         {% endfor %}
 
@@ -25,6 +28,27 @@
         </div>
     </div>
 </div>
+
+<!-- Modal to add new members -->
+ <div id="addMembersModal" class="modal" style="display: none;"> 
+    <div class="modal-content">
+        <h3>Informe o membro que deseja adicionar</h3>
+            <form onsubmit="addMember(event)">
+                <input type="hidden" id="modalWorkspaceId">
+                <select id="users_list" onclick="loadUsers()">
+                    <option>Carregando opções...</option>
+                </select>
+                <select id="roles_list">
+                    <option>Owner</option>
+                    <option>Member</option>
+                </select>
+                <button type="submit">Adicionar</button>
+                <button type="button" onclick="closeAddMembersModal()">Cancelar</button>
+            </form>            
+    </div>
+ </div>
+
+<script src="{{ url_for('static', filename='js/kanban.js') }}"></script>
 
 {% endblock %}
 

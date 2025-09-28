@@ -76,3 +76,62 @@ def board(board_id):
                            columns=columns,
                            cards=cards,
                            workspace_member=workspace_member)
+
+# Listing users
+@views_bp.route('/listing_users')
+@login_required
+def listing_users():
+    # Searching for all users
+    users = User.query.all()
+
+    users_matriz = []
+
+    for user in users: 
+        users_matriz.append(
+            {
+                "id" : user.id,
+                "username" : user.username,
+                "nickname" : user.nickname,
+                "email" : user.email,
+                "gender" : user.gender,
+                "age" : user.age,
+            }
+        )
+
+    return jsonify(users_matriz), 200
+
+# Listing workspace members
+@views_bp.route('/listing_workspace_members/<int:board_id>')
+@login_required
+def listing_workspace_members(board_id):
+    # Looking for a workspace that matches the passed id
+    board = Board.query.get_or_404(board_id)
+    workspace = Workspace.query.filter_by(id=board.workspace_id).first()
+    workspace_id = workspace.id
+
+    # Checking the user access
+    if not WorkspaceMember.query.filter_by(user_id=current_user.id, workspace_id=workspace.id).first():
+        return jsonify({"message:": "Acesso negado"}), 403
+    
+    # Searching for all workspace members
+    workspace_members = WorkspaceMember.query.filter_by(workspace_id=workspace_id).all()
+
+    workspace_matriz = []
+
+    for member in workspace_members: 
+        workspace_matriz.append(
+            {
+                "member_id" : member.id,
+                "user_id" : member.user_id,
+                "username" : member.user.username,
+                "nickname" : member.user.nickname,
+                "email" : member.user.email,
+                "gender" : member.user.gender,
+                "age" : member.user.age,
+                "role" : member.role,
+                "workspace_title" : member.workspace.title
+            }
+        )
+
+    return jsonify(workspace_matriz), 200
+

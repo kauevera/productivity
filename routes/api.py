@@ -43,8 +43,6 @@ def create_workspace():
     return render_template('home.html',
                            workspaces=workspaces)
 
-
-
 # Board Creation Route
 @api_bp.route('/create_board/<int:workspace_id>', methods=['POST'])
 @login_required
@@ -88,8 +86,6 @@ def create_board(workspace_id):
 
     # Returning to the endpoint that shows the boards
     return redirect(url_for('views.workspace', workspace_id=workspace.id)), 200
-
-
 
 # Card Creation Route
 @api_bp.route('/create_card', methods=['POST'])
@@ -155,3 +151,31 @@ def delete_card(card_id):
 
     # Returning to the endpoint that shows the cards
     return redirect(url_for('views.board', board_id=board.id)), 200
+
+# Member Inserting Route
+@api_bp.route('/add_member', methods=['POST'])
+@login_required
+def add_member():
+    if request.is_json:
+        data = request.json
+        workspace_id = data['workspace_id']
+        user_id = data['user_id']
+        role = data['role']
+    else:
+        workspace_id = request.form['workspace_id']
+        user_id = request.form['user_id']
+        role = request.form['role']
+
+    if workspace_id == None or user_id == None or role == None:
+        return jsonify({"message:": "É obrigatório informar todos os campos."}), 400
+    
+    if not Workspace.query.filter_by(id=user_id).first():
+        return jsonify({"message:": "Acesso negado"}), 403
+    
+    # Adding the member
+    member = WorkspaceMember(user_id=user_id, workspace_id=workspace_id, role=role)
+    db.session.add(member)
+    db.session.commit()
+
+    # Returning to the endpoint that shows the cards
+    return 200
