@@ -23,7 +23,7 @@ window.addEventListener('click', function(event) {
 
 //Showing the delete card modal
 function showDelCardModal(cardId) {
-    document.getElementById('modalCardnId').value = cardId;
+    document.getElementById('modalCardId').value = cardId;
     document.getElementById('delModal').style.display = 'block';
 }
 
@@ -59,7 +59,6 @@ window.addEventListener('click', function(event) {
     }
 });
 
-
 // Adding member into a workspace
 async function addMember(event) {
     event.preventDefault();
@@ -92,7 +91,6 @@ async function addMember(event) {
         alert('Erro de conexão');
     }
 }
-
 
 // Adding new cards
 async function addNewCard(event) {
