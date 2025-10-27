@@ -44,6 +44,7 @@ window.addEventListener('click', function(event) {
 function showAddMembersModal(workspaceId) {
     document.getElementById('modalWorkspaceId').value = workspaceId;
     document.getElementById('addMembersModal').style.display = 'block';
+    loadUsers();
 }
 
 // Closing the add members modal
@@ -162,6 +163,14 @@ async function loadUsers() {
 
         const select = document.getElementById("users_list");
         select.innerHTML = "";
+
+        //Empty option
+        const defaultOption = document.createElement("option");
+        defaultOption.value = "";
+        defaultOption.textContent = "Selecione um usuário";
+        defaultOption.disabled = true;
+        defaultOption.selected = true;
+        select.appendChild(defaultOption);
 
         data.forEach(item => {
             const option = document.createElement("option");
