@@ -11,13 +11,17 @@
     <div id="main-div">
         <div id="login-container">
             <h2>Login</h2>
-            <form id="loginForm" method="POST" action="{{url_for('auth.login')}}">
+            <form id="loginForm" method="POST">
                 <input type="text" name="nickname" id="nickname" placeholder="nickname" required>
                 <input type="password" name="password" id="password" placeholder="password" required>
-                <button type="submit">Get in</button>
+                <button type="submit">Login</button>
             </form>
             <p>Do not you have an account? Create one<a href="{{url_for('auth.register')}}" >Register</a></p>
         </div>
     </div>    
 </body>
 </html>
+
+<script src="{{ url_for('static', filename='js/auth.js') }}"></script>
+
+

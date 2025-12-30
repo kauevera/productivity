@@ -1,5 +1,4 @@
-from flask import Blueprint
-from flask import render_template, request, redirect, url_for
+from flask import render_template, request, redirect, url_for, Blueprint, jsonify
 from flask_login import login_user, login_required, logout_user
 from models import User, db
 
@@ -29,7 +28,23 @@ def register():
 
         # Checking if the nickname is already in use
         if User.query.filter_by(nickname=nickname).first():
-            return 'Este nickname já está em uso'
+            if request.is_json:
+                return jsonify({
+                    'message': 'Este nickname já está em uso', 
+                    'redirect': url_for('auth.register')
+                    }), 409
+            else:
+                return redirect(url_for('auth.register'))
+
+        # Checking if the email is already in use
+        if User.query.filter_by(email=email).first():
+            if request.is_json:
+                return jsonify({
+                    'message': 'Este email já está em uso',
+                    'redirect': url_for('auth.register')
+                    }), 409
+            else:
+                return redirect(url_for('auth.register'))
 
         # Inserting information into the users table
         user = User(username=username, nickname=nickname, email=email, gender=gender, age=age)
@@ -40,7 +55,14 @@ def register():
         # Login user method
         login_user(user)
         token = request.cookies.get('session')
-        return redirect(url_for('views.index')), 200 
+        
+        if request.is_json:
+                return jsonify({
+                    'message': 'Registro realizado com sucesso',
+                    'redirect': url_for('views.index')
+                }), 200
+        else:
+            return redirect(url_for('views.index'))
 
     return render_template('register.html')
 
@@ -63,10 +85,18 @@ def login():
         if user and user.check_password(password):
             login_user(user)
             token = request.cookies.get('session')
-            return redirect(url_for('views.index'))
 
+            if request.is_json:
+                return jsonify({
+                    'message': 'Login realizado com sucesso',
+                    'redirect': url_for('views.index')
+                }), 200
+            else:
+                return redirect(url_for('views.index'))
         else:
-            return 'O nickname ou a senha estão incorretos'
+            if request.is_json:
+                return jsonify({'message': 'Credenciais inválidas'}), 401
+            return render_template('login.html'), 401
 
     return render_template('login.html')
 

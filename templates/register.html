@@ -11,7 +11,7 @@
     <div id="main-div">
         <div id="register-container">
             <h2>Register</h2>
-            <form id="registerForm" method="POST" action="{{url_for('auth.register')}}">
+            <form id="registerForm" method="POST">
                 <input type="text" name="username" id="username" placeholder="username" required>
                 <input type="text" name="nickname" id="nickname" placeholder="nickname" required>
                 <input type="email" name="email" id="email" placeholder="email" required>
@@ -19,11 +19,11 @@
                 <div id="gender-div">
                     <p id="gender-title">What's your gender?</p>
                     <label>
-                        <input type="radio" name="gender" value="Male" required>
+                        <input type="radio" name="gender" id="gender-m" value="Male">
                         Male
                     </label>
                     <label>
-                        <input type="radio" name="gender" value="Female">
+                        <input type="radio" name="gender" id="gender-f" value="Female">
                         Female
                     </label>
                 </div>
@@ -35,3 +35,5 @@
     </div>    
 </body>
 </html>
+
+<script src="{{ url_for('static', filename='js/auth.js') }}"></script>
