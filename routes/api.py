@@ -24,7 +24,7 @@ def create_workspace():
             description = request.form['description']
 
         if title == None:
-            return jsonify({"message:": "É obrigatório informar um título"}), 400
+            return jsonify({"message": "É obrigatório informar um título"}), 400
 
         owner_id = current_user.id
 
@@ -37,8 +37,13 @@ def create_workspace():
         db.session.add(workspace_member)
         db.session.commit()
 
-        return redirect(url_for('views.index'))
-        ##return jsonify({"message:": "Workspace criado com sucesso."}), 200
+        if request.is_json:
+                return jsonify({
+                    'message': 'Workspace criado com sucesso',
+                    'redirect': url_for('views.index')
+                }), 200
+        else:
+            return redirect(url_for('views.index'))
 
     return render_template('home.html',
                            workspaces=workspaces)
@@ -52,7 +57,7 @@ def create_board(workspace_id):
 
     # Checking the users access
     if not WorkspaceMember.query.filter_by(user_id=current_user.id, workspace_id=workspace.id).first():
-        return jsonify({"message:": "Acesso negado"}), 403
+        return jsonify({"message": "Acesso negado"}), 403
 
     if request.is_json:
         data = request.get_json()
@@ -64,7 +69,7 @@ def create_board(workspace_id):
         about = request.form['about']
 
     if title == None:
-        return jsonify({"message:": "É obrigatório informar um título."}), 400
+        return jsonify({"message": "É obrigatório informar um título."}), 400
 
     # Adding the board
     board = Board(title=title, about=about, workspace_id=workspace_id)
@@ -107,7 +112,7 @@ def create_card():
         deadline = datetime.strptime(data['deadline'], '%Y-%m-%dT%H:%M%:%S')
 
     if title == None:
-        return jsonify({"message:": "É obrigatório informar um título."}), 400
+        return jsonify({"message": "É obrigatório informar um título."}), 400
     
     # Getting the board_id
     column = Column.query.filter_by(id=column_id).first()
@@ -130,7 +135,7 @@ def delete_card(card_id):
     # Checking the card existence
     card = Card.query.filter_by(id=card_id).first()
     if not card:
-        return jsonify({"message:": "O elemento informado não existe"}), 404
+        return jsonify({"message": "O elemento informado não existe"}), 404
 
     # Getting the board_id
     board_id = card.board_id
@@ -143,7 +148,7 @@ def delete_card(card_id):
 
     # Checking the users access
     if not WorkspaceMember.query.filter_by(user_id=current_user.id, workspace_id=workspace.id).first():
-        return jsonify({"message:": "Acesso negado"}), 403
+        return jsonify({"message": "Acesso negado"}), 403
 
     # Removing the card
     db.session.delete(card)
@@ -167,15 +172,38 @@ def add_member():
         role = request.form['role']
 
     if workspace_id == None or user_id == None or role == None:
-        return jsonify({"message:": "É obrigatório informar todos os campos."}), 400
+        return jsonify({"message": "É obrigatório informar todos os campos."}), 400
+      
+    #Checking if the workspace exists
+    if not Workspace.query.filter_by(id=workspace_id).first():
+        if request.is_json:
+                return jsonify({
+                    'message': 'O workspace informado não existe',
+                    'redirect': url_for('views.index')
+                }), 409
+        else:
+            return redirect(url_for('views.index'))
     
-    if not Workspace.query.filter_by(id=user_id).first():
-        return jsonify({"message:": "Acesso negado"}), 403
-    
-    # Adding the member
+    #Checking if the member is in the workspace yet
+    if WorkspaceMember.query.filter_by(user_id=user_id, workspace_id=workspace_id).first():
+        if request.is_json:
+            return jsonify({
+                'message': 'O usuário já está presente no workspace',
+                'redirect': url_for('views.index')
+            }), 409
+        else:
+            return redirect(url_for('views.index'))
+
+    # Adding the member   
     member = WorkspaceMember(user_id=user_id, workspace_id=workspace_id, role=role)
     db.session.add(member)
     db.session.commit()
 
-    # Returning to the endpoint that shows the cards
-    return 200
+    # Returning to the endpoint that shows the workspaces
+    if request.is_json:
+            return jsonify({
+                'message': 'Usuário inserido com sucesso.',
+                'redirect': url_for('views.index')
+            }), 200
+    else:
+         return redirect(url_for('views.index'))

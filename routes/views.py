@@ -23,7 +23,7 @@ def workspace(workspace_id):
 
     # Checking the users access
     if not WorkspaceMember.query.filter_by(user_id=current_user.id, workspace_id=workspace_id).first():
-        return jsonify({"message:": "Acesso negado"}), 403
+        return jsonify({"message": "Acesso negado"}), 403
 
     # Getting boards and members from the workspace
     boards = Board.query.filter_by(workspace_id=workspace_id)
@@ -46,7 +46,7 @@ def board(board_id):
 
     # Checking the users access
     if not WorkspaceMember.query.filter_by(user_id=current_user.id, workspace_id=workspace.id).first():
-        return jsonify({"message:": "Acesso negado"}), 403
+        return jsonify({"message": "Acesso negado"}), 403
 
     # Getting columns from the workspace
     columns = Column.query.filter_by(board_id=board_id).order_by(Column.position).all()
@@ -101,17 +101,18 @@ def listing_users():
     return jsonify(users_matriz), 200
 
 # Listing workspace members
-@views_bp.route('/listing_workspace_members/<int:board_id>')
+@views_bp.route('/listing_workspace_members/<int:workspace_id>')
 @login_required
-def listing_workspace_members(board_id):
+def listing_workspace_members(workspace_id):
     # Looking for a workspace that matches the passed id
-    board = Board.query.get_or_404(board_id)
-    workspace = Workspace.query.filter_by(id=board.workspace_id).first()
-    workspace_id = workspace.id
+    workspace = Workspace.query.filter_by(id=workspace_id).first()
+    
+    if not workspace:
+        return jsonify({"message": "O workspace informado não existe"}), 404
 
     # Checking the user access
     if not WorkspaceMember.query.filter_by(user_id=current_user.id, workspace_id=workspace.id).first():
-        return jsonify({"message:": "Acesso negado"}), 403
+        return jsonify({"message": "Acesso negado"}), 403
     
     # Searching for all workspace members
     workspace_members = WorkspaceMember.query.filter_by(workspace_id=workspace_id).all()

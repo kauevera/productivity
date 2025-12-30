@@ -40,6 +40,7 @@ window.addEventListener('click', function(event) {
     }
 });
 
+
 //Showing the add members modal
 function showAddMembersModal(workspaceId) {
     document.getElementById('modalWorkspaceId').value = workspaceId;
@@ -56,9 +57,47 @@ function closeAddMembersModal() {
 window.addEventListener('click', function(event) {
     const modal = document.getElementById('addMembersModal');
     if (event.target === modal) {
-        closeDelModal();
+        closeAddMembersModal();
     }
 });
+
+//Showing the view members modal
+function showViewMembersModal(workspaceId) {
+    document.getElementById('modalWorkspaceId').value = workspaceId;
+    document.getElementById('viewMembersModal').style.display = 'block';
+}
+
+// Closing the view members modal
+function closeViewMembersModal() {
+    document.getElementById('viewMembersModal').style.display = 'none';
+}
+
+// Closing the view members modal
+window.addEventListener('click', function(event) {
+    const modal = document.getElementById('viewMembersModal');
+    if (event.target === modal) {
+        closeViewMembersModal();
+    }
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // Adding member into a workspace
 async function addMember(event) {
@@ -66,7 +105,7 @@ async function addMember(event) {
     const workspace_id = document.getElementById('modalWorkspaceId').value
     const user_id = document.getElementById('users_list').value;
     const role = document.getElementById('roles_list').value;
-    const API_URL = "http://127.0.0.1:5000"; 
+    const API_URL = "http://localhost:5000"; 
     
     try {
         const response = await fetch(`${API_URL}/api/add_member`, {
@@ -80,12 +119,14 @@ async function addMember(event) {
                 role: role
             })
         });
-        
+
+        const data = await response.json();
+
         if (response.ok) {
-            alert('Membro adicionado com sucecsso');
+            alert(data.message);
             window.location.reload();
         } else {
-            alert('Erro ao adicionar membro');
+            alert(data.message);
         }
     } catch (error) {
         console.error('Erro:', error);
@@ -101,7 +142,7 @@ async function addNewCard(event) {
     const description = document.getElementById('cardDescription').value;
     const responsible_id = document.getElementById('workspace_members_list').value;
     const deadline = document.getElementById('date').value;
-    const API_URL = "http://127.0.0.1:5000"; 
+    const API_URL = "http://localhost:5000"; 
     
     try {
         const response = await fetch(`${API_URL}/api/create_card`, {
@@ -133,7 +174,7 @@ async function addNewCard(event) {
 async function delCard(event) {
     event.preventDefault();
     const card_id = document.getElementById('modalCardId').value
-    const API_URL = "http://127.0.0.1:5000"; 
+    const API_URL = "http://localhost:5000"; 
     
     try {
         const response = await fetch(`${API_URL}/api/delete_card/${card_id}`, {
@@ -156,7 +197,7 @@ async function delCard(event) {
 
 // Listing users
 async function loadUsers() {
-    const API_URL = "http://127.0.0.1:5000";
+    const API_URL = "http://localhost:5000";
     try {
         const response = await fetch(`${API_URL}/views/listing_users`);
         const data = await response.json()
@@ -186,7 +227,7 @@ async function loadUsers() {
 
 // Listing workspace members
 async function loadWorkspaceMembers(board_id) {
-    const API_URL = "http://127.0.0.1:5000";
+    const API_URL = "http://localhost:5000";
     try {
         const response = await fetch(`${API_URL}/views/listing_workspace_members/${board_id}`);
         const data = await response.json()

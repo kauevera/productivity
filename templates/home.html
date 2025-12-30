@@ -15,14 +15,18 @@
             <div>
                 <button class="add-card-btn" onclick="showAddMembersModal({{ workspace.id }})">Adicionar um membro</button>
             </div>
+            <div>
+                <button class="add-card-btn" onclick="showViewMembersModal({{ workspace.id }})">Ver membros</button>
+            </div>
         </div>
         {% endfor %}
 
+        
         <div class="new-workspace-card">
             <h3>+ Create a workspace</h3>
-            <form method="POST" action="{{ url_for('api.create_workspace')}}">
-                <input type="text" name="title" placeholder="Workspace's name" required>
-                <textarea name="description" placeholder="Workspace's description"></textarea>
+            <form id="createWorkspaceForm" method="POST">
+                <input type="text" name="title" id="title" placeholder="Workspace's name" required>
+                <textarea name="description" id="description" placeholder="Workspace's description"></textarea>
                 <button type="submit" class="button">Create</button>
             </form>
         </div>
@@ -35,7 +39,7 @@
         <h3>Informe o membro que deseja adicionar</h3>
             <form onsubmit="addMember(event)">
                 <input type="hidden" id="modalWorkspaceId">
-                <select id="users_list" onclick="loadUsers()">
+                <select id="users_list">
                     <option>Carregando opções...</option>
                 </select>
                 <select id="roles_list">
@@ -48,7 +52,15 @@
     </div>
  </div>
 
+ <!-- Modal to see the members of the workspace -->
+ <div id="viewMembersModal" class="modal" style="display: none;"> 
+    <div class="modal-content">
+        <h3>Lista de membros do workspace</h3>           
+    </div>
+ </div>
+
 <script src="{{ url_for('static', filename='js/kanban.js') }}"></script>
+<script src="{{ url_for('static', filename='js/creations.js') }}"></script>
 
 {% endblock %}
 
