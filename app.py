@@ -1,4 +1,4 @@
-from flask import Flask, redirect, url_for
+from flask import Flask, redirect, url_for, jsonify
 from flask_login import LoginManager
 from models import db, User
 from flask_cors import CORS
