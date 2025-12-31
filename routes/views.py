@@ -75,7 +75,8 @@ def board(board_id):
                            board=board,
                            columns=columns,
                            cards=cards,
-                           workspace_member=workspace_member)
+                           workspace_member=workspace_member,
+                           workspace=workspace)
 
 # Listing users
 @views_bp.route('/listing_users')
