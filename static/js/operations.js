@@ -57,11 +57,13 @@ async function addNewCard(event) {
                 responsible_id: responsible_id
             })
         });
+
+        const data = await response.json();
         
         if (response.ok) {
             window.location.reload();
         } else {
-            alert('Erro ao criar card');
+            alert(data.message);
         }
     } catch (error) {
         console.error('Erro:', error);

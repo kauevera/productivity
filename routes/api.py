@@ -1,7 +1,7 @@
 from flask import render_template, request, redirect, url_for, jsonify, Blueprint
 from flask_login import login_required, current_user
 from models import db, Workspace, WorkspaceMember, Board, Column, Card
-from datetime import datetime
+from datetime import datetime, date
 
 api_bp = Blueprint("api", __name__)
 
@@ -113,14 +113,30 @@ def create_card():
         responsible_id = request.form['responsible_id']
         deadline = datetime.strptime(data['deadline'], '%Y-%m-%dT%H:%M%:%S')
 
-    if title == None:
-        return jsonify({"message": "É obrigatório informar um título."}), 400
-    
+    today = datetime.today()
+  
     # Getting the board_id
     column = Column.query.filter_by(id=column_id).first()
     board_id = column.board_id
     # Getting the board
     board = Board.query.filter_by(id=board_id).first()
+
+    # Validating fields
+    if title == None:
+        if request.is_json:
+            return jsonify({
+                'message': 'É obrigatório informar um título.'
+            }), 400
+        else:
+            return redirect(url_for('views.board', board_id=board.id))
+
+    if deadline < today:
+        if request.is_json:
+            return jsonify({
+                'message': 'O prazo da tarefa não pode ser anterior a hoje'
+            }), 400
+        else:
+            return redirect(url_for('views.board', board_id=board.id))
 
     # Adding the card
     card = Card(column_id=column_id, title=title, description=description, board_id=board_id, responsible_id=responsible_id, deadline=deadline)
@@ -128,7 +144,13 @@ def create_card():
     db.session.commit()
 
     # Returning to the endpoint that shows the cards
-    return redirect(url_for('views.board', board_id=board.id)), 200
+    if request.is_json:
+        return jsonify({
+            'message': 'Card criado com sucesso.',
+            'redirect': url_for('views.board', board_id=board.id)
+        }), 200
+    else:
+         return redirect(url_for('views.board', board_id=board.id))
 
 # Card Deleting Route
 @api_bp.route('/delete_card/<int:card_id>', methods=['DELETE'])
