@@ -79,10 +79,6 @@ def create_board(workspace_id):
     # Adding the default columns
     default_columns = ['To Do', 'Doing', 'Done']
 
-    """for i, column_name in enumerate(default_columns):
-        column = Column(title=column_name, board_id=board.id, position=i)
-        db.session.add(column)"""
-
     for i in range(len(default_columns)):
         column = Column(title=default_columns[i], board_id =board.id, position=i)
         db.session.add(column)
@@ -90,7 +86,13 @@ def create_board(workspace_id):
     db.session.commit()
 
     # Returning to the endpoint that shows the boards
-    return redirect(url_for('views.workspace', workspace_id=workspace.id)), 200
+    if request.is_json:
+        return jsonify({
+            'message': 'Board criado com sucesso',
+            'redirect': url_for('views.workspace', workspace_id=workspace.id)
+        }), 200
+    else:
+        return redirect(url_for('views.workspace', workspace_id=workspace.id))
 
 # Card Creation Route
 @api_bp.route('/create_card', methods=['POST'])

@@ -17,13 +17,16 @@
     
         <div class="new-board-card">
             <h3>+ Create a board</h3>
-            <form method="POST" action="{{ url_for('api.create_board', workspace_id=workspace.id)}}">
-                <input type="text" name="title" placeholder="Board's name" required>
-                <textarea name="about" placeholder="Board's description"></textarea>
+            <form method="POST" id="createBoardForm">
+                <input type="hidden" id="workspaceId" name="workspace_id" value="{{ workspace.id }}">
+                <input type="text" id="title" name="title" placeholder="Board's name" required>
+                <textarea name="about" id="about" placeholder="Board's description"></textarea>
                 <button type="submit" class="button">Create</button>
             </form>
         </div>
     </div>
 
 </div>
+
+<script src="{{ url_for('static', filename='js/creations.js') }}"></script>
 {% endblock %} 
