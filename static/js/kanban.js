@@ -1,11 +1,12 @@
 // Showing the add form
-function showAddForm(columnId) {
+function showAddForm(columnId, workspaceId) {
     document.getElementById('modalColumnId').value = columnId;
     document.getElementById('cardTitle').value = '';
     document.getElementById('cardDescription').value = '';
     document.getElementById('workspace_members_list').value = '';
     document.getElementById('date').value = '';
     document.getElementById('addModal').style.display = 'block';
+    loadWorkspaceMembers(workspaceId);
 }
 
 // Closing the add form modal
@@ -79,25 +80,6 @@ window.addEventListener('click', function(event) {
         closeViewMembersModal();
     }
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // Adding member into a workspace
 async function addMember(event) {
@@ -226,18 +208,26 @@ async function loadUsers() {
 }
 
 // Listing workspace members
-async function loadWorkspaceMembers(board_id) {
+async function loadWorkspaceMembers(workspace_id) {
     const API_URL = "http://localhost:5000";
     try {
-        const response = await fetch(`${API_URL}/views/listing_workspace_members/${board_id}`);
+        const response = await fetch(`${API_URL}/views/listing_workspace_members/${workspace_id}`);
         const data = await response.json()
 
         const select = document.getElementById("workspace_members_list");
         select.innerHTML = "";
 
+        //Empty option
+        const defaultOption = document.createElement("option");
+        defaultOption.value = "";
+        defaultOption.textContent = "Selecione um responsável";
+        defaultOption.disabled = true;
+        defaultOption.selected = true;
+        select.appendChild(defaultOption);
+
         data.forEach(item => {
             const option = document.createElement("option");
-            option.value = item.id;
+            option.value = item.member_id;
             option.textContent = item.username;
             select.appendChild(option);
         });

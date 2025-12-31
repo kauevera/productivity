@@ -62,6 +62,7 @@ class Column(db.Model):
 
     # Table Relationships
     cards = db.relationship('Card', backref='column', lazy=True, order_by='Card.position')
+    boards = db.relationship('Board', backref='column')
 
 class Card(db.Model):
     # Table Columns

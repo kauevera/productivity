@@ -13,7 +13,7 @@
             <div class="column-header">
                 <h3>{{ column.title }}</h3>
                 <h4>{{ column.id }}</h4>
-                <button class="add-card-btn" onclick="showAddForm({{ column.id }})">
+                <button class="add-card-btn" onclick="showAddForm({{ column.id }}, {{ board.workspace_id }})">
                     ＋
                 </button>
             </div>
@@ -57,7 +57,7 @@
             </div>
             <div>
                 <label>Selecione um responsável:</label>
-                <select id="workspace_members_list" onclick="loadWorkspaceMembers({{ board.id }})">
+                <select id="workspace_members_list">
                     <option>Carregando opções...</option>
                 </select>
             </div>
