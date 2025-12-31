@@ -66,6 +66,7 @@ window.addEventListener('click', function(event) {
 function showViewMembersModal(workspaceId) {
     document.getElementById('modalWorkspaceId').value = workspaceId;
     document.getElementById('viewMembersModal').style.display = 'block';
+    loadViewWorkspaceMembers(workspaceId);
 }
 
 // Closing the view members modal
@@ -230,6 +231,28 @@ async function loadWorkspaceMembers(workspace_id) {
             option.value = item.member_id;
             option.textContent = item.username;
             select.appendChild(option);
+        });
+    } catch (error) {
+        console.error('Erro:', error);
+        alert('Erro de conexão');
+    }
+}
+
+// Listing view workspace members
+async function loadViewWorkspaceMembers(workspace_id) {
+    const API_URL = "http://localhost:5000";
+    try {
+        const response = await fetch(`${API_URL}/views/listing_workspace_members/${workspace_id}`);
+        const data = await response.json()
+
+        const select = document.getElementById("workspace_members_list");
+        select.innerHTML = "";
+
+        data.forEach(item => {
+            const p = document.createElement("p");
+            p.value = item.member_id;
+            p.textContent = item.username;
+            select.appendChild(p);
         });
     } catch (error) {
         console.error('Erro:', error);
