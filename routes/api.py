@@ -155,7 +155,13 @@ def delete_card(card_id):
     db.session.commit()
 
     # Returning to the endpoint that shows the cards
-    return redirect(url_for('views.board', board_id=board.id)), 200
+    if request.is_json:
+            return jsonify({
+                'message': 'Card deletado com sucesso.',
+                'redirect': url_for('views.board', board_id=board.id)
+            }), 200
+    else:
+         return redirect(url_for('views.board', board_id=board.id))
 
 # Member Inserting Route
 @api_bp.route('/add_member', methods=['POST'])

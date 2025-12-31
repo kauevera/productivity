@@ -166,11 +166,15 @@ async function delCard(event) {
                 'Content-Type': 'application/json',
             },
             });
+
+        const data = await response.json();
+
         if (response.ok) {
-            alert('Card deletado com sucesso');
+            alert(data.message);
             window.location.reload();
         } else {
             alert('Erro ao deletar o card');
+            window.location.reload();
         }
     } catch (error) {
         console.error('Erro:', error);
