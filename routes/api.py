@@ -111,7 +111,7 @@ def create_card():
         title = request.form['title']
         description = request.form['description']
         responsible_id = request.form['responsible_id']
-        deadline = datetime.strptime(data['deadline'], '%Y-%m-%dT%H:%M%:%S')
+        deadline = datetime.strptime(request.form['deadline'], '%Y-%m-%dT%H:%M%:%S')
 
     today = datetime.today()
   
