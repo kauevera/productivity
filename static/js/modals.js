@@ -5,13 +5,13 @@ function showAddForm(columnId, workspaceId) {
     document.getElementById('cardDescription').value = '';
     document.getElementById('workspace_members_list').value = '';
     document.getElementById('date').value = '';
-    document.getElementById('addModal').style.display = 'block';
+    document.getElementById('addModal').classList.add('show');
     loadWorkspaceMembers(workspaceId);
 }
 
 // Closing the add form modal
 function closeModal() {
-    document.getElementById('addModal').style.display = 'none';
+    document.getElementById('addModal').classList.remove('show');
 }
 
 // Closing the add form modal
@@ -25,12 +25,12 @@ window.addEventListener('click', function(event) {
 //Showing the delete card modal
 function showDelCardModal(cardId) {
     document.getElementById('modalCardId').value = cardId;
-    document.getElementById('delModal').style.display = 'block';
+    document.getElementById('delModal').classList.add('show');
 }
 
 // Closing the delete card modal
 function closeDelModal() {
-    document.getElementById('delModal').style.display = 'none';
+    document.getElementById('delModal').classList.remove('show');
 }
 
 // Closing the delete card modal
@@ -45,13 +45,13 @@ window.addEventListener('click', function(event) {
 //Showing the add members modal
 function showAddMembersModal(workspaceId) {
     document.getElementById('modalWorkspaceId').value = workspaceId;
-    document.getElementById('addMembersModal').style.display = 'block';
+    document.getElementById('addMembersModal').classList.add('show');
     loadUsers();
 }
 
 // Closing the add members modal
 function closeAddMembersModal() {
-    document.getElementById('addMembersModal').style.display = 'none';
+    document.getElementById('addMembersModal').classList.remove('show');
 }
 
 // Closing the add members modal
@@ -65,13 +65,13 @@ window.addEventListener('click', function(event) {
 //Showing the view members modal
 function showViewMembersModal(workspaceId) {
     document.getElementById('modalWorkspaceId').value = workspaceId;
-    document.getElementById('viewMembersModal').style.display = 'block';
+    document.getElementById('viewMembersModal').classList.add('show');
     loadViewWorkspaceMembers(workspaceId);
 }
 
 // Closing the view members modal
 function closeViewMembersModal() {
-    document.getElementById('viewMembersModal').style.display = 'none';
+    document.getElementById('viewMembersModal').classList.remove('show');
 }
 
 // Closing the view members modal
