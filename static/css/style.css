@@ -1,100 +1,249 @@
-body {
-    font-family: Arial, sans-serif;
+/* --- Variáveis de Cores e Estilo --- */
+:root {
+    --primary-color: #4f46e5;
+    --primary-hover: #4338ca;
+    --bg-color: #f3f4f6;
+    --card-bg: #ffffff;
+    --text-main: #1f2937;
+    --text-muted: #6b7280;
+    --danger: #ef4444;
+    --success: #10b981;
+    --border-color: #e5e7eb;
+    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* --- Reset e Geral --- */
+* {
     margin: 0;
     padding: 0;
-    background-color: #f5f5f5;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 }
 
-nav {
-    background-color: #2c3e50;
-    color: white;
-    padding: 1rem 0;
+body {
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    line-height: 1.6;
 }
 
-.nav-container {
-    max-width: 1200px;
-    margin: 0 auto;
+/* --- Navegação --- */
+.nav-cont {
+    background: white;
+    padding: 1rem 2rem;
+    border-bottom: 1px solid var(--border-color);
+    box-shadow: var(--shadow);
+}
+
+#user-options {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-bottom: 0.5rem;
 }
 
-.dashboard {
-    max-width: 1200px;
-    margin: 2rem auto;
-    padding: 0 1rem;
+.nav-user a {
+    margin-left: 15px;
+    text-decoration: none;
+    color: var(--primary-color);
+    font-weight: 600;
 }
 
-.workspace-grid {
+#navigation-hierarchy {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+#navigation-hierarchy a {
+    text-decoration: none;
+    color: var(--text-muted);
+}
+
+#navigation-hierarchy .separator {
+    margin: 0 5px;
+}
+
+/* --- Layout Principal --- */
+main {
+    padding: 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+/* --- Grids (Home e Workspace) --- */
+.workspaces-grid, .boards-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 1rem;
-    margin-top: 2rem;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
 }
 
-.workspace-card {
-    background: white;
+.workspace-card, .board-card, .new-workspace-card, .new-board-card {
+    background: var(--card-bg);
     padding: 1.5rem;
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.new-workspace form {
+    box-shadow: var(--shadow);
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    justify-content: space-between;
 }
 
-.board-container {
-    max-width: 1400px;
-    margin: 2rem auto;
-    padding: 0 1rem;
+.new-workspace-card, .new-board-card {
+    border: 2px dashed var(--border-color);
+    background: transparent;
 }
 
-.board-columns {
+/* --- Kanban Board --- */
+.columns-container {
     display: flex;
-    gap: 1rem;
+    gap: 1.5rem;
     overflow-x: auto;
-    padding: 1rem 0;
+    padding-bottom: 1rem;
+    align-items: flex-start;
 }
 
 .column {
-    background: #ebecf0;
-    padding: 1rem;
-    border-radius: 8px;
+    background: #ebedf0;
     min-width: 300px;
+    max-width: 300px;
+    border-radius: 8px;
+    padding: 1rem;
+    max-height: 80vh;
+    display: flex;
+    flex-direction: column;
 }
 
-.cards {
-    min-height: 100px;
-    margin: 1rem 0;
+.column-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.cards-list {
+    overflow-y: auto;
+    flex-grow: 1;
 }
 
 .card {
     background: white;
-    padding: 0.5rem;
-    margin: 0.5rem 0;
-    border-radius: 4px;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
-    cursor: move;
+    padding: 1rem;
+    border-radius: 6px;
+    margin-bottom: 0.8rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+    border-left: 4px solid var(--primary-color);
 }
 
+.card h4 { margin-bottom: 0.5rem; }
+.card p { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 0.5rem; }
+.assignee { font-size: 0.8rem; display: block; margin-bottom: 0.5rem; }
+
+/* --- Botões --- */
+button, .button {
+    cursor: pointer;
+    padding: 0.6rem 1rem;
+    border-radius: 4px;
+    border: none;
+    background-color: var(--primary-color);
+    color: white;
+    font-weight: 600;
+    transition: background 0.2s;
+    text-decoration: none;
+    text-align: center;
+    display: inline-block;
+}
+
+button:hover, .button:hover {
+    background-color: var(--primary-hover);
+}
+
+.add-card-btn {
+    background: #e2e8f0;
+    color: var(--text-main);
+    width: 100%;
+    margin-top: 0.5rem;
+}
+
+.add-card-btn:hover { background: #cbd5e1; }
+
+button[type="button"] { background: var(--text-muted); }
+button[onsubmit*="delCard"], .card button { 
+    background: transparent; 
+    color: var(--danger); 
+    font-size: 0.8rem;
+    padding: 2px;
+}
+
+/* --- Modais --- */
 .modal {
-    display: none;
+    display: none; /* Escondido por padrão */
     position: fixed;
     z-index: 1000;
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0,0,0,0.5);
+    background-color: rgba(0, 0, 0, 0.5); /* Fundo escurecido */
+    
+    /* Propriedades de centralização */
+    align-items: center; 
+    justify-content: center;
+}
+
+/* Quando esta classe é adicionada pelo JS, o modal aparece centralizado */
+.modal.show {
+    display: flex !important;
 }
 
 .modal-content {
     background-color: white;
-    margin: 15% auto;
-    padding: 2rem;
+    padding: 20px;
     border-radius: 8px;
-    width: 80%;
+    width: 90%;
     max-width: 500px;
+    position: relative; /* Garante que fique acima do overlay */
+}
+
+/* --- Formulários --- */
+form { display: flex; flex-direction: column; gap: 1rem; }
+
+input[type="text"], 
+input[type="password"], 
+input[type="email"], 
+input[type="number"], 
+input[type="datetime-local"], 
+textarea, 
+select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+/* --- Auth (Login/Register) --- */
+#main-div {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+#login-container, #register-container {
+    background: white;
+    padding: 3rem;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    width: 400px;
+}
+
+#gender-div { margin: 10px 0; }
+#gender-title { font-weight: bold; margin-bottom: 5px; }
+
+/* --- Footer --- */
+footer {
+    text-align: center;
+    padding: 2rem;
+    color: var(--text-muted);
+    font-size: 0.9rem;
 }
