@@ -42,7 +42,7 @@ def board(board_id):
     board = Board.query.get_or_404(board_id)
     workspace = Workspace.query.filter_by(id=board.workspace_id).first()
     workspace_id = workspace.id
-    workspace_member = WorkspaceMember.query.filter_by(workspace_id=workspace_id).first()
+    workspace_member = WorkspaceMember.query.filter_by(workspace_id=workspace_id, user_id=current_user.id).first()
 
     # Checking the users access
     if not WorkspaceMember.query.filter_by(user_id=current_user.id, workspace_id=workspace.id).first():
