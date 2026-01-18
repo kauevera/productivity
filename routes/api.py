@@ -23,7 +23,7 @@ def create_workspace():
             title = request.form['title']
             description = request.form['description']
 
-        if title == None:
+        if not title:
             return jsonify({"message": "É obrigatório informar um título"}), 400
 
         owner_id = current_user.id
@@ -68,7 +68,7 @@ def create_board(workspace_id):
         title = request.form['title']
         about = request.form['about']
 
-    if title == None:
+    if not title:
         return jsonify({"message": "É obrigatório informar um título."}), 400
 
     # Adding the board
@@ -122,7 +122,7 @@ def create_card():
     board = Board.query.filter_by(id=board_id).first()
 
     # Validating fields
-    if title == None:
+    if not title:
         if request.is_json:
             return jsonify({
                 'message': 'É obrigatório informar um título.'
